@@ -11,6 +11,8 @@ Wiki・原文・feed 定義は [ai-topics](https://github.com/kzinmr/ai-topics)�
 
 [ネイティブ移行検証](docs/native-validation.md) · [Docker依存撤去の評価](docs/docker-free-assessment.md) · [調査・移植レポート](docs/migration-report.md) · [設計](docs/architecture.md) · [移行手順](docs/migration.md) · [運用](docs/operations.md) · [検証記録](docs/validation.md)
 
+今後の検討: [OpenAIサービスによる周辺基盤の簡素化（設計ドラフト・未実装）](docs/openai-services-design-draft.md)。
+
 ## ホストで始める
 
 Linux/WSL、Python 3.12+、Git、Codex CLI が必要です。検証版は `codex-cli 0.157.1`。Windows は WSL2 を使います。Linuxではbubblewrapが必要です。この checkout と assets を保持して運用してください。
