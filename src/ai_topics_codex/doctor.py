@@ -69,6 +69,13 @@ def doctor(cfg, job=None):
         check("codex-binary", found)
         if found:
             from .codex import account_status
+            from .sandbox import probe
+
+            try:
+                result = probe(cfg)
+                check("native-sandbox", result["ok"], result)
+            except Exception as exc:
+                check("native-sandbox", False, str(exc))
 
             try:
                 check("chatgpt-subscription", True, account_status(cfg))

@@ -131,15 +131,21 @@ class Config:
         options = self.local.get("codex", {})
         if not isinstance(options, dict):
             raise ConfigError("codex must be an object")
-        if options.get("sandbox", "workspace-write") not in (
-            "workspace-write",
-            "external",
-        ):
-            raise ConfigError("invalid codex.sandbox")
+        if options.get("sandbox", "native") != "native":
+            raise ConfigError(
+                "codex.sandbox must be native; run sync-assets and remove old sandbox settings"
+            )
+        if options.get("network_access", False):
+            raise ConfigError(
+                "Use codex.network_jobs for explicit per-job network permission"
+            )
         if options.get("web_search", "live") not in ("live", "cached", "disabled"):
             raise ConfigError("invalid codex.web_search")
-        if not isinstance(options.get("network_access", True), bool):
-            raise ConfigError("codex.network_access must be boolean")
+        if "network_jobs" in options and (
+            not isinstance(options["network_jobs"], list)
+            or any(name not in self.by_name for name in options["network_jobs"])
+        ):
+            raise ConfigError("codex.network_jobs must list known job names")
 
     def env(self):
         env = os.environ.copy()
@@ -170,6 +176,7 @@ class Config:
             WIKI_PROFILE_ROOT=str(self.profile),
             WIKI_SUBPROCESS_HOME=str(self.profile),
             WIKI_AGENT_HOME=str(self.runtime),
+            WIKI_WORK_DIR=str(self.state / "work"),
             AI_TOPICS_REPO=str(self.repo),
             AI_TOPICS_HOME=str(self.repo),
             WIKI_ROOT=str(self.wiki),
@@ -182,6 +189,8 @@ class Config:
             + os.pathsep
             + env.get("PYTHONPATH", ""),
             TZ="UTC",
+            PYTHONDONTWRITEBYTECODE="1",
+            TMPDIR=str(self.state / "work"),
         )
         env["PATH"] = os.pathsep.join(
             [

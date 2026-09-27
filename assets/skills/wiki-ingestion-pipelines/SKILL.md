@@ -12,7 +12,7 @@ older output to work around a failed upstream stage. Persistent checkpoints are 
 ~/.wiki-agent/checkpoints, outputs under ~/.wiki-agent/outputs/<job-name>.
 After reading take sources, enrich existing pages and archive skip/reference decisions with
 python3 ~/.wiki-agent/scripts/archive_triage.py <blog|newsletter|dreaming>. Check its output
-and stage only new archive evidence and this job's Wiki edits. Preserve archive dedup state.
+and limit changes to new archive evidence and this job's Wiki edits. The runner stages and publishes. Preserve archive dedup state.
 
 Available deterministic helpers (inspect arguments and scope before using):
 - [scripts/prepend-log-entry.py](scripts/prepend-log-entry.py)

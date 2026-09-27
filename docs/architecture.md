@@ -46,7 +46,7 @@ flowchart LR
 
 認証typeが `chatgpt` でない場合は実行を停止。モデルはOpenAI providerへ固定し、API key / WIF / 別アクセスtokenの環境変数を除外します。通常枠が使えない・枠上限・spend controlに達した場合は停止し、API課金やreset creditへ切り替えません。モデル名は任意設定、未指定ならCodexの既定。上限到達後のジョブは失敗記録となり、明示再実行が必要です。
 
-配送用token、IMAP password、Slack tokenをモデルprocessの環境から除外します。ただしprofile内のファイルはツールから読みうるため、sandboxが秘密ファイルの完全な秘匿境界だとは主張しません。実行ログはprivate扱いで、既知の秘密値を記録前にredactします。
+配送用token、IMAP password、Slack tokenをモデルprocessの環境から除外します。モデルprocessには許可した環境変数だけを渡し、native permission profileは秘密情報の読み取りと管理領域の書き込みを拒否します。実行ログはprivate扱いで、既知の秘密値を記録前にredactします。
 
 ## Handoffと失敗
 
@@ -69,8 +69,20 @@ crashでrunning行が残ればschedulerを止めます。`recover`で副作用�
 
 outboxは内容処理と独立。再送はWikiジョブを再実行せず `outbox --deliver`。provider受理後のcrashによる重複はあり得るのでrun IDを付けます。初期設定は送信しないoutboxのみ。
 
-`publication`は `local` / `commit` / `push`。日常のモデル作業指示に反映されます。Git認証、hook実行とremoteは配備先の責任。push失敗時のforceや自動resetは認めません。
+`publication`は `local` / `commit` / `push`。モデルのGit書き込みは許可せず、runnerがclean worktreeの開始確認・原文不変性検証・Wiki変更のstage・hook付きcommit・pushを担当します。push失敗時のforceや自動resetは認めません。
 
 ## Sandbox
 
-HostはCodex `workspace-write`、writable rootsは専用profile。Docker版はroot filesystem read-only、非root、cap_drop ALL、no-new-privileges、tmpfsとprofile mountに限定し、Codex `externalSandbox` を使います。明示環境設定とcontainer markerがないhostでexternalを要求すると拒否します。このmarker検査だけがセキュリティ境界ではなく、Composeの隔離設定が実体です。Docker socket、host filesystem全体、production以外のprofileをmountしません。
+Codex 0.157.1の `default_permissions=wiki-native` を使用し、read/write/denyを場所別に指定します。
+`:minimal` と必要なPython/Codex実行ファイルに読み取り許可、Wikiと専用scratchに書き込み許可。
+管理scripts/skills/checkpoints/outputsは読み取りだけ、authとsecretsはアクセス拒否です。
+Git metadataを含むcontent repo全体は読み取りだけで、Wikiにのみ追加書き込みを許可します。
+triage/groupingはWikiも読み取り専用。編集ジョブのrawは読み取りだけ、調査ジョブにはraw追加を許可し、
+runnerが既存原文のハッシュ不変性を検証します。collectorが変更した既存原文も同じ検査対象です。
+
+App Server起動時に権限profileを設定し、thread/turnには古い `sandbox` / `sandboxPolicy` を送信しません。
+これらの上書きで場所別権限が失われるのを避け、CLI/chatと同じ設定を継承します。
+`doctor`、`sandbox-check`、service開始時の検査が実際のApp Server `command/exec` で境界を検証します。
+Dockerfile/Compose/externalSandbox経路は撤去しました。collector・scheduler・配送自体は信頼済みホスト処理です。
+
+[公式permission設定](https://learn.chatgpt.com/docs/config-file/config-reference)を参照。

@@ -9,4 +9,4 @@ Read SCHEMA.md, index.md and related pages first. Inspect both curated pages and
 A page needs the schema's frontmatter, an evidence-backed scope and meaningful links. Use at
 least two relevant links when the schema requires them; never fabricate links to meet a count.
 Patch existing rich pages. Update index and log together. Reusable answers belong in queries;
-comparisons belong in comparisons. Preserve raw files. Inspect staged diffs and run hooks.
+comparisons belong in comparisons. Preserve raw files. Inspect file diffs. The runner owns staging, hooks and publication.

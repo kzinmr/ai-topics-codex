@@ -20,7 +20,9 @@ Use the selected skills and schema supplied by the runner. Final structured
 responses must contain only schema-valid JSON with the input checkpoint_run_id.
 For all other jobs report actual changes and sources in Japanese.
 
-Before committing inspect Git status and diff; run .githooks/pre-commit. Only
-stage this job's files. The publication policy below controls commit and push.
-A failed check or rejected push is a failure to publish, never a completed push.
-Do not force, bypass hooks, discard changes or silently consume stale outputs.
+The model edits content only. Git metadata, operational code and runtime state
+are read-only or inaccessible. The runner validates existing raw preservation and
+owns commits/pushes after the turn. Never request broader sandbox access. Use
+WIKI_WORK_DIR (also TMPDIR) for temporary files and analysis caches. JSON handoffs
+are returned as final output; the runner stores them. The publication policy below
+controls the runner, not your shell commands. Report failed checks accurately.

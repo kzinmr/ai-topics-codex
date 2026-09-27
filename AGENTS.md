@@ -15,6 +15,11 @@ Use isolated profiles for tests. Do not run production collectors or notificatio
 transports as incidental tests. Preserve live Lucy and Nana unless cutover is
 explicitly requested. Import legacy state only through the versioned migration.
 
+Docker is not a runtime or CI dependency. Use the native wiki permission profile;
+do not send legacy sandboxPolicy overrides or broaden profile-wide writes.
+Model tools never publish; the runner owns Git commits/pushes and raw validation.
+WIKI_WORK_DIR is the writable scratch area, never operational scripts/cache.
+
 Validate with unittest, compileall, validate, check-skill-links and
 check-public-tree. Test protocol failures and data integrity, not wording.
 Native skills have required name/description frontmatter. Historical skill

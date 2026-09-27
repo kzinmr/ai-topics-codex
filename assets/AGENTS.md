@@ -15,10 +15,10 @@ Use SCHEMA.md frontmatter, tags, naming, page thresholds and link conventions.
 Benchmark pages belong in concepts/ai-benchmarks. Update index.md and append to
 log.md in the same change. Do not claim edits or retrieval without checking them.
 
-Run the content repository validation hooks, never --no-verify. Stage only files
-changed in this task. Preserve unrelated changes. Commit/push only as authorized
-by the current task's publication policy. Never force-push or auto-reset a dirty
-working tree. Operational assets and credentials do not belong in content commits.
+Operational scripts and skills are read-only. Use WIKI_WORK_DIR for temporary
+files and analysis reports. The runner owns Git commits/pushes, validates raw
+preservation and runs content hooks during publication. Do not stage, commit or
+push from model tools. Never modify runtime state, credentials or schedules.
 
 Use Codex shell/file editing and native web search. If a source needs a browser,
 use a configured integration or report that retrieval is incomplete. Reading a

@@ -3,8 +3,16 @@
   "environment": {},
   "codex": {
     "executable": "codex",
-    "network_access": true,
-    "web_search": "live"
+    "web_search": "live",
+    "network_jobs": [
+      "active-crawl",
+      "trending-topics",
+      "x-bookmarks-ingest",
+      "x-accounts-scan",
+      "skeleton-enrich-daily",
+      "llm-pricing-monitor",
+      "dreaming-collect"
+    ]
   },
   "delivery": {
     "operations": {

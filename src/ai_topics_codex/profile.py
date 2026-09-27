@@ -45,7 +45,7 @@ def initialize(cfg, content_source=None, clone=False):
     if cfg.wiki.exists() or cfg.wiki.is_symlink():
         raise ValueError("wiki path already exists")
     cfg.wiki.symlink_to("ai-topics/wiki", target_is_directory=True)
-    for name in ["checkpoints", "outputs", "scripts", "bin"]:
+    for name in ["checkpoints", "outputs", "scripts", "bin", "work"]:
         (cfg.runtime / name).mkdir(parents=True, exist_ok=True)
     (cfg.profile / ".codex").mkdir(mode=0o700, exist_ok=True)
     json_write(
@@ -71,6 +71,7 @@ def initialize(cfg, content_source=None, clone=False):
 def sync_assets(cfg):
     if not (cfg.state / "profile.json").exists():
         raise ValueError("profile must be initialized first")
+    (cfg.state / "work").mkdir(mode=0o700, exist_ok=True)
     manifest_path = cfg.state / "assets.json"
     previous = json.loads(manifest_path.read_text()) if manifest_path.exists() else {}
     planned = {

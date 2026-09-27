@@ -5,7 +5,6 @@ Protocol references and tested versions: docs/architecture.md.
 
 from __future__ import annotations
 import json
-from pathlib import Path
 import queue
 import subprocess
 import threading
@@ -118,44 +117,51 @@ def reject_server_request(stream, event):
 
 
 def codex_env(env):
-    """Subscription-only: do not inherit API billing/provider overrides."""
-    env = dict(env)
-    for key in list(env):
-        if key.startswith(
-            (
-                "OPENAI_",
-                "AZURE_OPENAI_",
-                "CODEX_API_",
-                "CODEX_WIF_",
-                "DISCORD_",
-                "TELEGRAM_",
-                "CF_EMAIL_",
-            )
-        ) or key in (
-            "CODEX_ACCESS_TOKEN",
-            "CODEX_MANAGED_AUTH",
-            "CODEX_PROVIDER",
-            "EMAIL_PASSWORD",
-            "SLACK_BOT_TOKEN",
-            "CODEX_INTERNAL_ORIGINATOR_OVERRIDE",
-            "CODEX_THREAD_ID",
-            "CODEX_SESSION_ID",
-        ):
-            env.pop(key, None)
-    return env
+    """Only operational paths reach the model process; never source secrets."""
+    allowed = {
+        "HOME",
+        "PATH",
+        "LANG",
+        "LC_ALL",
+        "LC_CTYPE",
+        "TERM",
+        "TZ",
+        "TMPDIR",
+        "PYTHONPATH",
+        "PYTHONDONTWRITEBYTECODE",
+        "CODEX_HOME",
+        "WIKI_PROFILE_ROOT",
+        "WIKI_SUBPROCESS_HOME",
+        "WIKI_AGENT_HOME",
+        "WIKI_WORK_DIR",
+        "WIKI_ROOT",
+        "WIKI_PATH",
+        "AI_TOPICS_REPO",
+        "AI_TOPICS_HOME",
+        "AI_TOPICS_CODEX_SOURCE",
+        "AI_TOPICS_CODEX_STATE",
+        "AI_TOPICS_JOBS_FILE",
+        "AI_TOPICS_SKILLS",
+    }
+    return {key: value for key, value in env.items() if key in allowed}
 
 
-def command(options):
-    return [
-        options.get("executable", "codex"),
-        "-c",
-        'forced_login_method="chatgpt"',
-        "-c",
-        'model_provider="openai"',
-        "-c",
-        "web_search=" + json.dumps(options.get("web_search", "live")),
-        "app-server",
-    ]
+def command(options, cfg=None, job=None):
+    from .sandbox import arguments
+
+    return (
+        [
+            options.get("executable", "codex"),
+            "-c",
+            'forced_login_method="chatgpt"',
+            "-c",
+            'model_provider="openai"',
+            "-c",
+            "web_search=" + json.dumps(options.get("web_search", "live")),
+        ]
+        + (arguments(cfg, job) if cfg else [])
+        + ["app-server"]
+    )
 
 
 def connect(argv, cwd, env, timeout, event_sink=None):
@@ -210,7 +216,7 @@ def require_capacity(limits):
 
 def account_status(cfg):
     options = cfg.local.get("codex", {})
-    stream = connect(command(options), cfg.profile, cfg.env(), 30)
+    stream = connect(command(options, cfg), cfg.profile, cfg.env(), 30)
     try:
         account = require_subscription(stream)
         limits = usage_limits(stream)
@@ -228,45 +234,20 @@ def codex(argv, prompt, cwd, env, timeout, options):
         account = require_subscription(stream)
         limits = usage_limits(stream)
         require_capacity(limits)
-        external = (
-            options.get("sandbox", env.get("WIKI_CODEX_SANDBOX", "workspace-write"))
-            == "external"
-        )
-        if external and not (
-            env.get("WIKI_CONTAINER_ISOLATED") == "1"
-            and (Path("/.dockerenv").exists() or Path("/run/.containerenv").exists())
-        ):
-            raise RuntimeError(
-                "external sandbox requires the isolated container deployment"
-            )
         params = {
             "cwd": str(cwd),
             "approvalPolicy": "never",
-            "sandbox": "read-only" if external else "workspace-write",
             "modelProvider": "openai",
         }
         if options.get("model"):
             params["model"] = options["model"]
         result, _ = _codex_request(stream, 3, "thread/start", params)
         thread = result["thread"]["id"]
-        policy = {
-            "type": "workspaceWrite",
-            "writableRoots": [env["WIKI_PROFILE_ROOT"]],
-            "networkAccess": options.get("network_access", True),
-        }
-        if external:
-            policy = {
-                "type": "externalSandbox",
-                "networkAccess": "enabled"
-                if options.get("network_access", True)
-                else "restricted",
-            }
         params = {
             "threadId": thread,
             "input": [{"type": "text", "text": prompt}],
             "cwd": str(cwd),
             "approvalPolicy": "never",
-            "sandboxPolicy": policy,
         }
         if options.get("output_schema"):
             params["outputSchema"] = options["output_schema"]
@@ -332,10 +313,12 @@ def codex(argv, prompt, cwd, env, timeout, options):
         stream.close()
 
 
-def run_agent(cfg, prompt, timeout, *, output_schema=None, event_sink=None):
+def run_agent(cfg, prompt, timeout, *, output_schema=None, event_sink=None, job=None):
     options = {
         **cfg.local.get("codex", {}),
         "output_schema": output_schema,
         "event_sink": event_sink,
     }
-    return codex(command(options), prompt, cfg.repo, cfg.env(), timeout, options)
+    return codex(
+        command(options, cfg, job), prompt, cfg.repo, cfg.env(), timeout, options
+    )

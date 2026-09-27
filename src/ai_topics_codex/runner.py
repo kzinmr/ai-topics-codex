@@ -56,11 +56,9 @@ def prompt_for(cfg, job, context=""):
     ]
     publication = cfg.local.get("publication", "local")
     parts.append(
-        {
-            "local": "Publication: edit files only; do not commit or push.",
-            "commit": "Publication: validate and commit this job’s files; do not push.",
-            "push": "Publication: validate, commit and push this job’s files to the configured content origin.",
-        }[publication]
+        "Publication: do not commit or push. The trusted runner validates and "
+        "publishes to the configured content origin after this turn, according "
+        f"to publication={publication}. Git metadata is read-only to your tools."
     )
     for skill in job["skills"]:
         path = cfg.skills / skill / "SKILL.md"
@@ -129,6 +127,16 @@ def run_job(cfg, store, job, adapter=run_agent, replay=None):
     detail = {"run": run, "job": job["name"], "harness": "codex"}
     status = "error"
     try:
+        from .publication import (
+            preflight,
+            evidence,
+            verify_evidence,
+            publish,
+            validate_wiki,
+        )
+
+        preflight(cfg)
+        original_evidence = evidence(cfg)
         reason = dependencies_ready(cfg, store, job, at)
         if reason:
             raise RuntimeError(reason)
@@ -208,6 +216,7 @@ def run_job(cfg, store, job, adapter=run_agent, replay=None):
                     job["timeout_seconds"],
                     output_schema=schema,
                     event_sink=record,
+                    job=job,
                 )
             else:
                 result = adapter(cfg, prompt, job["timeout_seconds"])
@@ -267,6 +276,10 @@ def run_job(cfg, store, job, adapter=run_agent, replay=None):
                 }
             )
             status = "ok"
+        validate_wiki(cfg)
+        verify_evidence(original_evidence)
+        if status == "ok":
+            detail["publication"] = publish(cfg, job, run)
         response = _redact(cfg, response)
         atomic_write(folder / "response.md", response)
         # Publish only successful output; downstream JSON readers never scrape prose.

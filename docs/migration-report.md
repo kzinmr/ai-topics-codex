@@ -1,5 +1,8 @@
 # Lucy の Codex ネイティブ移植レポート
 
+> 初回移植時の履歴。Docker経路は後続変更で撤去済み。現在の状態は [ネイティブ移行検証](native-validation.md)。
+
+
 調査・実装日: 2026-09-27。移植元 `ai-topics-agent` は commit `b87a0a20246e08c97ddbf5eacfcffcdbfeaf4bc1`。Lucy のlive設定・checkpoint・content treeも読み取り確認しました。
 
 ## 課題と変更

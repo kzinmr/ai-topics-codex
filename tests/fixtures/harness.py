@@ -37,7 +37,7 @@ for line in sys.stdin:
         elif method == "thread/start":
             send({"id": data["id"], "result": {"thread": {"id": "thread-fixture"}}})
         elif method == "turn/start":
-            assert data["params"]["sandboxPolicy"]["type"] == "workspaceWrite"
+            assert "sandboxPolicy" not in data["params"]
             assert data["params"]["approvalPolicy"] == "never"
             if scenario == "reject":
                 send(

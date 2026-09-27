@@ -23,6 +23,7 @@ def main(argv=None):
     subs.add_parser("login")
     subs.add_parser("account")
     subs.add_parser("chat")
+    subs.add_parser("sandbox-check")
     subs.add_parser("validate")
     subs.add_parser("jobs")
     init = subs.add_parser("init")
@@ -80,19 +81,20 @@ def main(argv=None):
                 return subprocess.run(
                     cmd + ["login", "--device-auth"], env=codex_env(cfg.env())
                 ).returncode
-            if (
-                cfg.local.get("codex", {}).get(
-                    "sandbox", cfg.env().get("WIKI_CODEX_SANDBOX")
-                )
-                == "external"
-            ):
-                raise ValueError(
-                    "chat is a host CLI entrypoint; external-sandbox containers use App Server jobs"
-                )
+            from .sandbox import arguments
+
+            cmd += arguments(cfg)
             with profile_lock(cfg.state):
                 return subprocess.run(
                     cmd + ["--cd", str(cfg.repo)], env=codex_env(cfg.env())
                 ).returncode
+        if args.action == "sandbox-check":
+            from .sandbox import probe
+
+            with profile_lock(cfg.state):
+                result = probe(cfg)
+            emit(result)
+            return 0 if result["ok"] else 1
         if args.action == "retry":
             from .runner import retry
 
@@ -119,7 +121,8 @@ def main(argv=None):
         if args.action == "doctor":
             from .doctor import doctor
 
-            result = doctor(cfg, args.job)
+            with profile_lock(cfg.state):
+                result = doctor(cfg, args.job)
             emit(result)
             return 0 if result["ok"] else 1
         if args.action in ("run", "prompt"):
@@ -152,6 +155,12 @@ def main(argv=None):
                 result = tick(cfg)
                 emit(result)
                 return int(any(r["status"] == "error" for r in result))
+            from .sandbox import probe
+
+            with profile_lock(cfg.state):
+                result = probe(cfg)
+            if not result["ok"]:
+                raise RuntimeError("native sandbox check failed; scheduler not started")
             while True:
                 emit(tick(cfg))
                 sys.stdout.flush()

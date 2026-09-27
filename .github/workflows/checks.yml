@@ -4,7 +4,7 @@ permissions:
   contents: read
 jobs:
   test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -17,4 +17,10 @@ jobs:
       - run: bin/ai-topics-codex validate
       - run: python tools/check-skill-links.py
       - run: python tools/check-public-tree.py
-      - run: docker compose -f deploy/compose.yaml config --quiet
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: npm install -g @openai/codex@0.157.1
+      - run: sudo tools/setup-linux-sandbox
+      - run: bin/ai-topics-codex --profile .local/ci-sandbox init
+      - run: bin/ai-topics-codex --profile .local/ci-sandbox sandbox-check

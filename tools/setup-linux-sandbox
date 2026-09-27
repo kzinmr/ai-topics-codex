@@ -1,0 +1,28 @@
+#!/usr/bin/env bash
+# Run explicitly with sudo on Ubuntu 24.04. Never disables global AppArmor policy.
+set -euo pipefail
+if [[ ${EUID} -ne 0 ]]; then
+  echo 'Run with sudo: tools/setup-linux-sandbox' >&2
+  exit 1
+fi
+source /etc/os-release
+if [[ ${ID:-} != ubuntu || ${VERSION_ID:-} != 24.04 ]]; then
+  echo 'This installer supports Ubuntu 24.04 only; see the native deployment guide.' >&2
+  exit 1
+fi
+apt-get update
+apt-get install --no-install-recommends -y bubblewrap apparmor-profiles apparmor-utils
+source_profile=/usr/share/apparmor/extra-profiles/bwrap-userns-restrict
+target_profile=/etc/apparmor.d/bwrap-userns-restrict
+if [[ ! -f $source_profile ]]; then
+  echo 'The distribution AppArmor profile is missing; global restrictions remain unchanged.' >&2
+  exit 1
+fi
+if [[ -f $target_profile ]] && ! cmp -s "$source_profile" "$target_profile"; then
+  echo 'An existing customized bwrap profile was found; inspect it before replacement.' >&2
+  exit 1
+fi
+install -m 0644 "$source_profile" "$target_profile"
+apparmor_parser -r "$target_profile"
+printf 'Installed bubblewrap and loaded its AppArmor profile. Global userns restriction: '
+cat /proc/sys/kernel/apparmor_restrict_unprivileged_userns

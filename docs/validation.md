@@ -1,5 +1,8 @@
 # 検証記録 — 2026-09-27
 
+> 初回移植時の履歴。Docker経路は後続変更で撤去済み。現在の状態は [ネイティブ移行検証](native-validation.md)。
+
+
 ## 自動検証
 
 `python -m unittest discover -s tests -v`: **50 tests passed**（25.227秒、最終機能変更後）。
