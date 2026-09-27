@@ -37,7 +37,7 @@ docker compose -f deploy/compose.yaml logs --tail=100 lucy
 
 `/workspace/profile`はcontainer内部だけのpathで、promptやskillに固定しません。UID/GIDはmount所有者に合わせます。profile directoryを先に作成し、root所有の自動作成を避けます。CODEX_HOMEやX OAuth等はprofile volumeに永続化されます。host専用のauth_home絶対pathはcontainerで解決できないので、共有する場合は別途その領域を明示mountしてください。
 
-hostで `bwrap` のユーザー名前空間が利用できない場合、hostのsandboxを自動で無効化しません。このCompose deploymentを使います。外側のDocker隔離が必須なので、privileged、Docker socket mount、host root mountを追加しないでください。
+hostで `bwrap` のユーザー名前空間が利用できない場合、hostのsandboxを自動で無効化しません。まず配布版bubblewrapとAppArmor設定を確認します。[Docker依存撤去の評価](docker-free-assessment.md) を参照してください。このCompose deploymentは初回検証時の回避経路で、Docker必須を意味しません。外側のDocker隔離が必須なので、privileged、Docker socket mount、host root mountを追加しないでください。
 
 ## Host service
 

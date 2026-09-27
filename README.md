@@ -9,7 +9,7 @@ Wiki・原文・feed 定義は [ai-topics](https://github.com/kzinmr/ai-topics)�
 - ChatGPT 認証を実行前に確認。APIキー・別モデルプロバイダーへ自動で切り替えません。
 - ホストまたは権限を制限した Docker で配備。旧状態は新しい形式へ明示的に変換します。
 
-[調査・移植レポート](docs/migration-report.md) · [設計](docs/architecture.md) · [移行手順](docs/migration.md) · [運用](docs/operations.md) · [検証記録](docs/validation.md)
+[Docker依存撤去の評価](docs/docker-free-assessment.md) · [調査・移植レポート](docs/migration-report.md) · [設計](docs/architecture.md) · [移行手順](docs/migration.md) · [運用](docs/operations.md) · [検証記録](docs/validation.md)
 
 ## ホストで始める
 
@@ -49,7 +49,7 @@ bin/ai-topics-codex run blog-wiki-ingest
 
 ## Docker
 
-このホストのようにユーザー名前空間が制限される環境では [Docker 手順](docs/operations.md#docker) を利用します。Compose は read-only root、非rootユーザー、capability削除と専用profile mountで隔離し、Codexには `externalSandbox` を指定します。ホストの標準動作は `workspace-write` のままです。
+初回検証ではホストのsandbox起動失敗を回避するためDockerを使用しました。ただしDockerは必須ではなく、今後は標準sandboxによるホスト運用へ統一する方針です。このホストでは配布版bubblewrapと専用AppArmorプロファイルが未導入でした。原因候補・現行設計の不足・撤去条件は [再評価](docs/docker-free-assessment.md) を参照してください。以下は現在残っている [Docker 手順](docs/operations.md#docker) です。Compose は read-only root、非rootユーザー、capability削除と専用profile mountで隔離し、Codexには `externalSandbox` を指定します。ホストの標準動作は `workspace-write` のままです。
 
 ```sh
 mkdir -p profiles/lucy
