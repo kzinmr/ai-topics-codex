@@ -133,3 +133,19 @@ class SandboxTest(unittest.TestCase):
         (self.cfg.wiki / "unsafe").symlink_to(self.cfg.state / "secrets.json")
         with self.assertRaisesRegex(RuntimeError, "symlink rejected"):
             validate_wiki(self.cfg)
+
+    def test_failed_probe_cleans_up_its_canaries(self):
+        from unittest.mock import patch
+        from ai_topics_codex.sandbox import probe
+
+        with patch(
+            "ai_topics_codex.codex.connect", side_effect=OSError("missing executable")
+        ):
+            with self.assertRaisesRegex(OSError, "missing executable"):
+                probe(self.cfg)
+        for root in (
+            self.cfg.wiki,
+            self.cfg.runtime / "scripts",
+            self.cfg.profile / ".codex",
+        ):
+            self.assertEqual(list(root.glob(".probe-*")), [])

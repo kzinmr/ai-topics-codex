@@ -24,7 +24,7 @@ Ubuntu 24.04.4 / Linux 6.8.0-134 / Codex CLI 0.157.1。
 
 | 検証 | 結果 |
 |---|---|
-| オフライン回帰 | 59テスト成功。compileall、未定義名・未使用import検査、ジョブvalidate、skill参照、公開tree検査も成功 |
+| オフライン回帰 | 60テスト成功。compileall、未定義名・未使用import検査、ジョブvalidate、skill参照、公開tree検査も成功 |
 | App Serverの非モデルsandbox probe | 11項目合格。許可された書き込み、管理領域・authの読み取り拒否、script/raw書き込み拒否、symlink経由の読み取り拒否、ローカルTCP拒否と原文保持 |
 | systemd一時service | NoNewPrivileges=yes / TasksMax=256 / MemoryMax=4Gで同じprobeが成功。常駐schedulerは起動していない |
 | systemd unit構文 | `systemd-analyze --user verify` 成功 |
