@@ -1,0 +1,1 @@
+Use the supplied newsletter triage JSON. Read take sources, check overlap with blog ingestion and integrate verified novel facts. Archive skip/reference using archive_triage.py newsletter. Update index/log and report changes.

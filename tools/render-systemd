@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+"""Print a user service; does not install or start it."""
+import argparse
+import os
+from pathlib import Path
+p=argparse.ArgumentParser();p.add_argument('--profile',type=Path,required=True);p.add_argument('--python',type=Path,required=True);a=p.parse_args()
+source=Path(__file__).resolve().parents[1]
+def quote(value):
+    return '"'+str(value).replace('\\','\\\\').replace('"','\\"').replace('%','%%')+'"'
+print('[Unit]\nDescription=AI Topics Lucy scheduler\nAfter=network-online.target\n\n[Service]\nType=simple')
+print('WorkingDirectory='+str(source).replace('%','%%'))
+print('Environment='+quote('AI_TOPICS_PYTHON='+str(a.python.absolute())))
+print('Environment='+quote('PATH='+os.environ.get('PATH','/usr/local/bin:/usr/bin:/bin')))
+print('ExecStart='+quote(source/'bin/ai-topics-codex')+' --profile '+quote(a.profile.resolve())+' serve')
+print('Restart=on-failure\nRestartSec=30\nKillMode=control-group\nTimeoutStopSec=30\nUMask=0077\n\n[Install]\nWantedBy=default.target')

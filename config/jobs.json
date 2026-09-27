@@ -1,0 +1,561 @@
+{
+  "version": 1,
+  "timezone": "UTC",
+  "jobs": [
+    {
+      "name": "blog-triage",
+      "enabled": true,
+      "schedule": "20 10 * * *",
+      "script": "blog_checkpoint.py",
+      "no_agent": false,
+      "skills": [
+        "semantic-article-grouping"
+      ],
+      "prompt": "assets/prompts/blog-triage.md",
+      "depends_on": [
+        "blog-ingest"
+      ],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "json",
+      "delivery": "operations",
+      "id": "blog-triage"
+    },
+    {
+      "name": "blog-wiki-ingest",
+      "enabled": true,
+      "schedule": "40 10 * * *",
+      "script": "blog_triage_checkpoint.py",
+      "no_agent": false,
+      "skills": [
+        "llm-wiki",
+        "semantic-article-grouping"
+      ],
+      "prompt": "assets/prompts/blog-wiki-ingest.md",
+      "depends_on": [
+        "blog-triage"
+      ],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "blog-wiki-ingest"
+    },
+    {
+      "name": "blog-ingest",
+      "enabled": true,
+      "schedule": "0 10 * * *",
+      "script": "blog_ingest.py",
+      "no_agent": false,
+      "skills": [],
+      "prompt": "assets/prompts/blog-ingest.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "blog-ingest"
+    },
+    {
+      "name": "check-skill-inventory",
+      "enabled": true,
+      "schedule": "0 16 * * 0",
+      "script": "check_new_skills.py",
+      "no_agent": false,
+      "skills": [],
+      "prompt": "assets/prompts/check-skill-inventory.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "check-skill-inventory"
+    },
+    {
+      "name": "weekly-ai-digest",
+      "enabled": true,
+      "schedule": "0 0 * * 1",
+      "script": null,
+      "no_agent": false,
+      "skills": [
+        "report-quality"
+      ],
+      "prompt": "assets/prompts/weekly-ai-digest.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "digest",
+      "id": "weekly-ai-digest"
+    },
+    {
+      "name": "dreaming-collect",
+      "enabled": true,
+      "schedule": "0 18 * * *",
+      "script": "dreaming_collect.py",
+      "no_agent": false,
+      "skills": [],
+      "prompt": "assets/prompts/dreaming-collect.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "dreaming-collect"
+    },
+    {
+      "name": "dreaming-group",
+      "enabled": true,
+      "schedule": "10 18 * * *",
+      "script": "dreaming_checkpoint.py",
+      "no_agent": false,
+      "skills": [
+        "dreaming",
+        "semantic-article-grouping",
+        "daily-rss-triage"
+      ],
+      "prompt": "assets/prompts/dreaming-group.md",
+      "depends_on": [
+        "dreaming-collect"
+      ],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "json",
+      "delivery": "operations",
+      "id": "dreaming-group"
+    },
+    {
+      "name": "dreaming-wiki-ingest",
+      "enabled": true,
+      "schedule": "20 18 * * *",
+      "script": "dreaming_group_checkpoint.py",
+      "no_agent": false,
+      "skills": [
+        "dreaming",
+        "llm-wiki",
+        "semantic-article-grouping",
+        "daily-rss-triage",
+        "blogwatcher-db",
+        "report-quality"
+      ],
+      "prompt": "assets/prompts/dreaming-wiki-ingest.md",
+      "depends_on": [
+        "dreaming-group"
+      ],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "dreaming-wiki-ingest"
+    },
+    {
+      "name": "trending-topics",
+      "enabled": true,
+      "schedule": "0 12 * * *",
+      "script": null,
+      "no_agent": false,
+      "skills": [
+        "llm-wiki",
+        "daily-rss-triage"
+      ],
+      "prompt": "assets/prompts/trending-topics.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "trending-topics"
+    },
+    {
+      "name": "wiki-graph-analysis",
+      "enabled": true,
+      "schedule": "0 15 * * 5",
+      "script": null,
+      "no_agent": false,
+      "skills": [
+        "llm-wiki"
+      ],
+      "prompt": "assets/prompts/wiki-graph-analysis.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "wiki-graph-analysis"
+    },
+    {
+      "name": "wiki-health",
+      "enabled": false,
+      "schedule": "0 17 * * *",
+      "script": null,
+      "no_agent": false,
+      "skills": [
+        "llm-wiki"
+      ],
+      "prompt": "assets/prompts/wiki-health.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "wiki-health"
+    },
+    {
+      "name": "newsletter-ingest",
+      "enabled": true,
+      "schedule": "10 10 * * *",
+      "script": "process_email.py",
+      "no_agent": false,
+      "skills": [],
+      "prompt": "assets/prompts/newsletter-ingest.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "newsletter-ingest"
+    },
+    {
+      "name": "newsletter-triage",
+      "enabled": true,
+      "schedule": "30 10 * * *",
+      "script": "newsletter_checkpoint.py",
+      "no_agent": false,
+      "skills": [
+        "semantic-article-grouping"
+      ],
+      "prompt": "assets/prompts/newsletter-triage.md",
+      "depends_on": [
+        "newsletter-ingest"
+      ],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "json",
+      "delivery": "operations",
+      "id": "newsletter-triage"
+    },
+    {
+      "name": "newsletter-wiki-ingest",
+      "enabled": true,
+      "schedule": "50 10 * * *",
+      "script": "newsletter_triage_checkpoint.py",
+      "no_agent": false,
+      "skills": [
+        "llm-wiki",
+        "semantic-article-grouping"
+      ],
+      "prompt": "assets/prompts/newsletter-wiki-ingest.md",
+      "depends_on": [
+        "newsletter-triage"
+      ],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "newsletter-wiki-ingest"
+    },
+    {
+      "name": "x-bookmarks-ingest",
+      "enabled": true,
+      "schedule": "30 11,23 * * *",
+      "script": "fetch_x_bookmarks.py",
+      "no_agent": false,
+      "skills": [
+        "wiki-ingestion-pipelines",
+        "raw-article-filename-policy",
+        "wiki-entity-enrichment-from-article",
+        "x-article-getxapi-fallback"
+      ],
+      "prompt": "assets/prompts/x-bookmarks-ingest.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "x-bookmarks-ingest"
+    },
+    {
+      "name": "x-accounts-scan",
+      "enabled": true,
+      "schedule": "30 22 */2 * *",
+      "script": "fetch_x_accounts.py",
+      "no_agent": false,
+      "skills": [],
+      "prompt": "assets/prompts/x-accounts-scan.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "x-accounts-scan"
+    },
+    {
+      "name": "skeleton-enrich-daily",
+      "enabled": true,
+      "schedule": "0 19 * * *",
+      "script": null,
+      "no_agent": false,
+      "skills": [
+        "wiki-entity-enrichment-from-article"
+      ],
+      "prompt": "assets/prompts/skeleton-enrich-daily.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "skeleton-enrich-daily"
+    },
+    {
+      "name": "wiki-health-plan",
+      "enabled": false,
+      "schedule": "10 17 * * *",
+      "script": "wiki_health.py",
+      "no_agent": false,
+      "skills": [],
+      "prompt": "assets/prompts/wiki-health-plan.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "wiki-health-plan"
+    },
+    {
+      "name": "wiki-health-fix",
+      "enabled": true,
+      "schedule": "50 17 * * *",
+      "script": "wiki_health_json.py",
+      "no_agent": false,
+      "skills": [
+        "llm-wiki",
+        "wiki-graph-health"
+      ],
+      "prompt": "assets/prompts/wiki-health-fix.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "wiki-health-fix"
+    },
+    {
+      "name": "ai-topics-slack-hot-posts",
+      "enabled": true,
+      "schedule": "30 0,12,18 * * *",
+      "script": "ai_topics_slack_hot_posts_context.py",
+      "no_agent": false,
+      "skills": [
+        "llm-wiki",
+        "report-quality"
+      ],
+      "prompt": "assets/prompts/ai-topics-slack-hot-posts.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "hot-posts",
+      "id": "ai-topics-slack-hot-posts"
+    },
+    {
+      "name": "active-crawl",
+      "enabled": true,
+      "schedule": "0 11 * * *",
+      "script": null,
+      "no_agent": false,
+      "skills": [
+        "llm-wiki"
+      ],
+      "prompt": "assets/prompts/active-crawl.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "active-crawl"
+    },
+    {
+      "name": "sitemap-monitor",
+      "enabled": true,
+      "schedule": "0 6 * * *",
+      "script": "sitemap_monitor.py",
+      "no_agent": true,
+      "skills": [],
+      "prompt": "assets/prompts/sitemap-monitor.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "sitemap-monitor"
+    },
+    {
+      "name": "tag-audit-weekly",
+      "enabled": true,
+      "schedule": "0 10 * * 1",
+      "script": "tag_audit.py",
+      "no_agent": false,
+      "skills": [
+        "llm-wiki",
+        "wiki-graph-health"
+      ],
+      "prompt": "assets/prompts/tag-audit-weekly.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "tag-audit-weekly"
+    },
+    {
+      "name": "pipeline-watchdog",
+      "enabled": true,
+      "schedule": "0 0,6,12,18 * * *",
+      "script": "pipeline_watchdog.py",
+      "no_agent": true,
+      "skills": [],
+      "prompt": "assets/prompts/pipeline-watchdog.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "pipeline-watchdog"
+    },
+    {
+      "name": "wiki-watchdog-fix",
+      "enabled": true,
+      "schedule": "35 17 * * *",
+      "script": "wiki_watchdog_fix_context.py",
+      "no_agent": false,
+      "skills": [
+        "llm-wiki",
+        "wiki-graph-health"
+      ],
+      "prompt": "assets/prompts/wiki-watchdog-fix.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "wiki-watchdog-fix"
+    },
+    {
+      "name": "raw-backlog-ingest",
+      "enabled": false,
+      "schedule": "0 0,4,10,14,18,22 * * *",
+      "script": "raw_backlog_collect_cron.sh",
+      "no_agent": false,
+      "skills": [
+        "semantic-article-grouping",
+        "wiki-entity-enrichment-from-article",
+        "raw-article-filename-policy"
+      ],
+      "prompt": "assets/prompts/raw-backlog-ingest.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "raw-backlog-ingest"
+    },
+    {
+      "name": "jp-to-en-translation",
+      "enabled": true,
+      "schedule": "0 0 * * 0",
+      "script": null,
+      "no_agent": false,
+      "skills": [
+        "llm-wiki"
+      ],
+      "prompt": "assets/prompts/jp-to-en-translation.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "jp-to-en-translation"
+    },
+    {
+      "name": "skill-drift-check",
+      "enabled": true,
+      "schedule": "0 10 * * 1",
+      "script": null,
+      "no_agent": false,
+      "skills": [
+        "skill-drift-check"
+      ],
+      "prompt": "assets/prompts/skill-drift-check.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "skill-drift-check"
+    },
+    {
+      "name": "llm-pricing-monitor",
+      "enabled": true,
+      "schedule": "0 10 * * 1",
+      "script": null,
+      "no_agent": false,
+      "skills": [
+        "trending-topics-reporting"
+      ],
+      "prompt": "assets/prompts/llm-pricing-monitor.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "llm-pricing-monitor"
+    },
+    {
+      "name": "hierarchy-candidate-detection",
+      "enabled": true,
+      "schedule": "0 15 * * 3",
+      "script": null,
+      "no_agent": false,
+      "skills": [
+        "wiki-maintenance"
+      ],
+      "prompt": "assets/prompts/hierarchy-candidate-detection.md",
+      "depends_on": [],
+      "max_dependency_age_hours": 26,
+      "timeout_seconds": 3600,
+      "script_timeout_seconds": 600,
+      "response_format": "text",
+      "delivery": "operations",
+      "id": "hierarchy-candidate-detection"
+    }
+  ]
+}

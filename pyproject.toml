@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ai-topics-codex"
+version = "1.0.0"
+description = "Codex subscription-native AI knowledge wiki operations"
+requires-python = ">=3.12"
+dependencies = []
+
+[project.optional-dependencies]
+collectors = ["beautifulsoup4==4.14.3", "httpx==0.28.1", "readability-lxml==0.8.4.1", "PyYAML==6.0.3", "requests==2.32.5"]
+
+[project.scripts]
+ai-topics-codex = "ai_topics_codex.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

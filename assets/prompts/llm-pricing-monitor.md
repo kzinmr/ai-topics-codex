@@ -1,0 +1,1 @@
+Read existing pricing/model comparison pages and retrieve current official pricing documentation. Record dates, units, tiers, cached-token distinctions and uncertainty. Update only supported changes with sources. Subscription token usage is not an API dollar bill.

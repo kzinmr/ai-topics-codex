@@ -1,0 +1,1 @@
+Use the supplied tracked-account posts. Read substantive linked sources, filter duplicates and irrelevant posts, save new raw material and integrate evidence. Attribute claims to the actual author and preserve post IDs.

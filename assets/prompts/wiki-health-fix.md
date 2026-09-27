@@ -1,0 +1,1 @@
+Use the supplied health JSON to repair verified link, frontmatter and index issues in small batches. Preserve raw and rich pages. Re-run health and hooks and report before/after counts and remaining issues.

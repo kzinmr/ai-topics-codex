@@ -1,0 +1,1 @@
+Use the supplied unprocessed raw article batch. Read each source, deduplicate against current pages/log/archive, then triage and integrate novel evidence. Record skip/reference rationale without modifying original raw articles. This manual job remains paused in the schedule.

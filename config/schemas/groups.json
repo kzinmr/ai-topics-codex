@@ -1,0 +1,109 @@
+{
+  "type": "object",
+  "properties": {
+    "checkpoint_run_id": {
+      "type": "string"
+    },
+    "summary_ja": {
+      "type": "string"
+    },
+    "decisions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "item_id": {
+            "type": "string"
+          },
+          "source": {
+            "type": "string"
+          },
+          "source_name": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "raw_path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "recommended_action": {
+            "type": "string",
+            "enum": [
+              "take",
+              "reference",
+              "skip"
+            ]
+          },
+          "reason_ja": {
+            "type": "string"
+          },
+          "candidate_wiki_path": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "body_excerpt": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "item_id",
+          "source",
+          "source_name",
+          "title",
+          "url",
+          "raw_path",
+          "recommended_action",
+          "reason_ja",
+          "candidate_wiki_path",
+          "body_excerpt"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "groups": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "theme": {
+            "type": "string"
+          },
+          "summary_ja": {
+            "type": "string"
+          },
+          "item_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "theme",
+          "summary_ja",
+          "item_ids"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "checkpoint_run_id",
+    "summary_ja",
+    "decisions",
+    "groups"
+  ],
+  "additionalProperties": false
+}

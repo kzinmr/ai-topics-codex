@@ -1,0 +1,1 @@
+Run python3 ~/.wiki-agent/scripts/detect_hierarchy_candidates.py after inspecting its interface. Review candidates against actual page scope and backlinks. Report evidence-backed hierarchy changes; do not bulk move pages without verifying each destination.

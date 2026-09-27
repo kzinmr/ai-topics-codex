@@ -1,0 +1,11 @@
+#!/bin/sh
+# Build for the target architecture; never copy host-specific ELF binaries.
+set -eu
+profile_root=${WIKI_PROFILE_ROOT:?Set WIKI_PROFILE_ROOT to the destination profile}
+mkdir -p "$profile_root/bin" "$profile_root/.wiki-agent/bin"
+build_dir=$(mktemp -d)
+trap 'rm -rf "$build_dir"' EXIT HUP INT TERM
+GOBIN="$build_dir" go install github.com/Hyaxia/blogwatcher/cmd/blogwatcher@v0.0.2
+install -m 755 "$build_dir/blogwatcher" "$profile_root/bin/blogwatcher-cli"
+GOBIN="$build_dir" go install github.com/xdevplatform/xurl@v1.1.0
+install -m 755 "$build_dir/xurl" "$profile_root/.wiki-agent/bin/xurl"

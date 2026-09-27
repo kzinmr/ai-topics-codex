@@ -1,0 +1,1 @@
+Triage the supplied newsletter checkpoint, including nested articles and saved newsletter bodies. Preserve distinct items and identify newsletter navigation/tracking links. Return the triage JSON schema.

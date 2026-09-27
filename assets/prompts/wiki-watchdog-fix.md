@@ -1,0 +1,1 @@
+Review the injected watchdog context. Verify each actionable issue before fixing content or links. Do not restart collectors, change schedules, suppress errors or infer old output is current. Report non-content operational failures to the runner.

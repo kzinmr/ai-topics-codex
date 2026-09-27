@@ -1,0 +1,1 @@
+Find up to eight curated English Wiki pages with substantial untranslated Japanese body text. Exclude raw, transcripts, logs and schema. Translate body text while preserving meaning, frontmatter, links, code and evidence. Update dates/index/log as needed and report remaining work.

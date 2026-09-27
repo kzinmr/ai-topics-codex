@@ -1,0 +1,1 @@
+Review the injected Codex skill inventory. Identify unmanaged or missing skills and explain whether they duplicate a managed capability. Return a report; do not install or rewrite skills automatically.

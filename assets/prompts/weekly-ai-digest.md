@@ -1,0 +1,1 @@
+Review the last seven days of Wiki commits, log entries and sources. Produce a concise Japanese digest with significant developments, evidence-backed comparisons and links to relevant Wiki pages. Return the text for the runner’s digest route.

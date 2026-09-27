@@ -1,0 +1,8 @@
+#!/bin/sh
+set -eu
+agent_repo=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+export AI_TOPICS_CODEX_SOURCE="$agent_repo"
+export PYTHONPATH="$agent_repo/src${PYTHONPATH:+:$PYTHONPATH}"
+wiki_python=${AI_TOPICS_PYTHON:-"$agent_repo/.venv/bin/python"}
+if [ ! -x "$wiki_python" ]; then wiki_python=python3; fi
+exec "$wiki_python" -m ai_topics_codex "$@"

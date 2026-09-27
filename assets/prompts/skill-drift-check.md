@@ -1,0 +1,1 @@
+Run python3 ~/.wiki-agent/scripts/check_skill_drift.py. Summarize changed or missing managed skills. Reconciliation belongs in the operational repository; do not overwrite installed drift or edit content-repository configuration.

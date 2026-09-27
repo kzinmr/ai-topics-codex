@@ -1,0 +1,1 @@
+Research current AI trends using configured sources and native web search. Verify primary evidence, distinguish popularity from novelty, integrate substantive findings and return a sourced Japanese report.

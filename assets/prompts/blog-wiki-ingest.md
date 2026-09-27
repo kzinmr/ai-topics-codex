@@ -1,0 +1,1 @@
+Use the supplied blog triage JSON. Read take article bodies, integrate novel evidence into existing pages or justified new pages. Archive skip/reference decisions using archive_triage.py blog. Update index/log and report changes.

@@ -1,0 +1,1 @@
+Find a bounded batch of status:skeleton curated entity pages. Research missing primary evidence and enrich them without replacing useful existing text. Remove skeleton status only when substantive gaps are filled.

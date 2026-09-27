@@ -1,0 +1,21 @@
+{
+  "max_catchup_minutes": 1440,
+  "environment": {},
+  "codex": {
+    "executable": "codex",
+    "network_access": true,
+    "web_search": "live"
+  },
+  "delivery": {
+    "operations": {
+      "kind": "outbox"
+    },
+    "digest": {
+      "kind": "outbox"
+    },
+    "hot-posts": {
+      "kind": "outbox"
+    }
+  },
+  "publication": "local"
+}

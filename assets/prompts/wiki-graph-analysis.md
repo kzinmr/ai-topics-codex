@@ -1,0 +1,1 @@
+Run ~/.wiki-agent/scripts/wiki_graph_analysis_weekly.py after inspecting its interface. Verify graph findings, identify orphan/weakly connected topics and report concrete maintenance recommendations. Save a reusable analysis only if it adds value.

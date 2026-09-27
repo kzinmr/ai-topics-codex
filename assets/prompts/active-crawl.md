@@ -1,0 +1,1 @@
+Read ~/ai-topics/config/hot-topics.yaml and identify concrete gaps in existing Wiki coverage. Research a bounded set of priority gaps with primary sources. Save new raw evidence once, enrich curated pages and update index/log.

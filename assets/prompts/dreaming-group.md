@@ -1,0 +1,1 @@
+Group the supplied dreaming checkpoint articles into themes. Return the groups JSON schema with checkpoint_run_id, summary_ja, groups (theme, summary_ja, item_ids) and individual triage decisions. Preserve source IDs; group summaries should be compact.
