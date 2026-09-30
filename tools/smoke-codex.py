@@ -15,6 +15,7 @@ from ai_topics_codex.config import Config, json_write
 from ai_topics_codex.profile import initialize
 from ai_topics_codex.runner import run
 from ai_topics_codex.state import Store
+from ai_topics_codex.sandbox import probe
 
 p = argparse.ArgumentParser(description=__doc__)
 p.add_argument(
@@ -30,13 +31,21 @@ p.add_argument(
     help="Existing ChatGPT login directory; credentials are not copied",
 )
 a = p.parse_args()
-with tempfile.TemporaryDirectory(prefix="wiki-codex-acceptance-") as temp:
+# OS temp directories can carry implicit sandbox access (observed on macOS).
+# Keep the profile under ignored development state and verify the real boundary
+# before spending model usage or opening the existing authentication directory.
+scratch = Path(__file__).resolve().parents[1] / ".local" / "smoke-profiles"
+scratch.mkdir(parents=True, exist_ok=True)
+with tempfile.TemporaryDirectory(prefix="wiki-codex-acceptance-", dir=scratch) as temp:
     cfg = Config(profile=Path(temp))
     initialize(cfg)
     cfg.local = {
         "codex": {"auth_home": str(a.auth_home.resolve()), "web_search": "disabled"},
         "publication": "local",
     }
+    boundary = probe(cfg)
+    if not boundary["ok"]:
+        raise RuntimeError({"sandbox_probe": boundary})
     subprocess.run(["git", "init", "-q", str(cfg.repo)], check=True)
     (cfg.wiki / "SCHEMA.md").write_text("""# Schema
 Curated pages are English. Use title, created, updated, type, tags and sources

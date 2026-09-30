@@ -1,0 +1,52 @@
+{
+  "version": 1,
+  "content_commit": "d1de5a96",
+  "description": "Partial archival public-source snapshot. article-3 summarizes article-4; they are not independent evidence. No assertion of current accuracy. Missing linked pages are intentional.",
+  "files": [
+    {
+      "id": "article-1",
+      "role": "article",
+      "kind": "archived-documentation-summary",
+      "path": "wiki/raw/articles/2026-05-27_openai-codex-app-server.md",
+      "sha256": "7d4c92c86f15f54f38c99dba434e0b9f20503613555e03f5d96a76d6838d1e22"
+    },
+    {
+      "id": "article-2",
+      "role": "article",
+      "kind": "archived-article",
+      "path": "wiki/raw/articles/2026-03-09_openai-developers-blog_skills-agents-sdk.md",
+      "sha256": "92b7ef9baaf14720797716120c1c97fca8f214203bad39800d198faad9081a50"
+    },
+    {
+      "id": "article-3",
+      "role": "article",
+      "kind": "archived-summary",
+      "path": "wiki/raw/articles/2026-01-09_lancemartin_agent-design-patterns.md",
+      "sha256": "4d1a37521fa3115e4d3197fb6c02d060eca798ec0d9545ba0763529581a78540"
+    },
+    {
+      "id": "article-4",
+      "role": "article",
+      "kind": "archived-full-text",
+      "path": "wiki/raw/articles/2026-01-09_rlancemartin_agent-design-patterns.md",
+      "sha256": "3b160aadf1e76ee019003a06add5514f54081f4d40bb80ef457948093349248f"
+    },
+    {
+      "id": "article-5",
+      "role": "article",
+      "kind": "archived-article",
+      "path": "wiki/raw/articles/2026-05-10_cursor_prompt-design.md",
+      "sha256": "ea827a1c0df911daffc9a2451af4d2e2a6f23db4744d685c85b7f8dc231050c9"
+    },
+    {
+      "role": "page",
+      "path": "wiki/concepts/harness-engineering/agent-design-patterns.md",
+      "sha256": "a1702b5436341dd89ed3437a480cc40bcaca583925044cd4bc1147b1a94b7a08"
+    },
+    {
+      "role": "page",
+      "path": "wiki/concepts/prompt-design.md",
+      "sha256": "78c5e9b38ffb47e213b19d8c60c6197701bb74a75de303e72289218091d09822"
+    }
+  ]
+}

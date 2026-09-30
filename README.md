@@ -12,6 +12,8 @@ Wiki・原文・feed 定義は [ai-topics](https://github.com/kzinmr/ai-topics)�
 [ネイティブ移行検証](docs/native-validation.md) · [Docker依存撤去の評価](docs/docker-free-assessment.md) · [調査・移植レポート](docs/migration-report.md) · [設計](docs/architecture.md) · [移行手順](docs/migration.md) · [運用](docs/operations.md) · [検証記録](docs/validation.md)
 
 今後の検討: [OpenAIサービスによる周辺基盤の簡素化（設計ドラフト・未実装）](docs/openai-services-design-draft.md)。
+責務の再分解: [通常ソフトウェア・モデル処理・Agent Harnessのモジュール設計（検討用・未実装）](docs/modular-wiki-design-draft.md)。
+学習用の実行記録: [2026-09-30のドラフト検証とCodex SDK実験](docs/learning-lab-validation-2026-09-30.md)。
 
 ## ホストで始める
 

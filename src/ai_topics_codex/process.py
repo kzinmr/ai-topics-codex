@@ -6,6 +6,10 @@ import subprocess
 
 
 def stop(proc):
+    # Reap an already-exited leader before signalling its group. On macOS a
+    # zombie-only group can report EPERM. Still signal the group afterwards:
+    # descendants may outlive their leader and must obey the same deadline.
+    proc.poll()
     try:
         os.killpg(proc.pid, signal.SIGTERM)
     except ProcessLookupError:
