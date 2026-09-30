@@ -1,6 +1,6 @@
 # Lucy の Codex ネイティブ移植レポート
 
-> 初回移植時の履歴。Docker経路は後続変更で撤去済み。現在の状態は [ネイティブ移行検証](native-validation.md)。
+> 初回移植時の履歴。現在の状態は [ネイティブ移行検証](native-validation.md)。
 
 
 調査・実装日: 2026-09-27。移植元 `ai-topics-agent` は commit `b87a0a20246e08c97ddbf5eacfcffcdbfeaf4bc1`。Lucy のlive設定・checkpoint・content treeも読み取り確認しました。
@@ -56,7 +56,7 @@ Lucyはraw sourceからcurated Wikiへ知識を統合し、schema / index / log�
 ## 実装中に判明した問題と対処
 
 - App Server終了後のstdin closeでBrokenPipeが元のエラーを隠す問題を修正。
-- hostの `bwrap: setting up uid map: Permission denied` を確認。ホストsandboxを弱める自動fallbackを設けず、隔離済Docker + externalSandboxで実動作を確認。
+- 初回のhost sandbox起動時にuid mapエラーを確認。後続のホスト設定と検証は [ネイティブ移行検証](native-validation.md) に記録。
 - restoreでGit hookの実行bitが失われる問題を修正し、doctorと回帰テストを追加。
 - dreamingのrun IDが `_checkpoint.run_id` にある場合も照合。
 - 上流skip時に古いtriageを再利用しないようskipを伝播。

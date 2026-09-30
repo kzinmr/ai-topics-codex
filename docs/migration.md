@@ -39,7 +39,7 @@ bin/ai-topics-codex --profile "$NEW_PROFILE" run blog-triage --dry-run
 
 ## 本番cutover
 
-1. 旧Lucyのwriterを停止し、進行中のWiki編集を終える。旧deploymentがDockerならそのcompose rootで `docker compose stop hermes-lucy`。Nanaや共有サービスは停止対象ではありません。HermesのCLI操作が必要な場合は元repositoryの `bin/hermes-lucy` wrapperだけを使います。
+1. 旧Lucyのwriterを停止し、進行中のWiki編集を終える。旧Lucyの定期実行を、その環境のサービス管理手順で停止する。Nanaや共有サービスは停止対象ではありません。HermesのCLI操作が必要な場合は元repositoryの `bin/hermes-lucy` wrapperだけを使います。
 2. 新しいファイル名で `snapshot --legacy --include-content --quiesced`。quiescedは利用者による「writer停止済み」の表明で、ツールが他hostのwriterを止めるわけではありません。
 3. **新規profile**をinitし、`restore <bundle>`（`--rehearsal`なし）。既存restore先へ重ねません。
 4. `login`、取得元認証、source CLI、Git identity/credentialsを設定。`doctor` と `account` を確認。

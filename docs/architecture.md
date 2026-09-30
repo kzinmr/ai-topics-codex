@@ -83,6 +83,6 @@ runnerが既存原文のハッシュ不変性を検証します。collectorが�
 App Server起動時に権限profileを設定し、thread/turnには古い `sandbox` / `sandboxPolicy` を送信しません。
 これらの上書きで場所別権限が失われるのを避け、CLI/chatと同じ設定を継承します。
 `doctor`、`sandbox-check`、service開始時の検査が実際のApp Server `command/exec` で境界を検証します。
-Dockerfile/Compose/externalSandbox経路は撤去しました。collector・scheduler・配送自体は信頼済みホスト処理です。
+collector・scheduler・配送自体は信頼済みホスト処理です。
 
 [公式permission設定](https://learn.chatgpt.com/docs/config-file/config-reference)を参照。

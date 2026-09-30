@@ -121,7 +121,7 @@ workspaceはsandboxの存続中に保持され、出力artifactの公開機能�
 
 **設計判断:** sessionをWikiの正本にしない。Gitのbase commitと原文IDを入力にし、
 結果を検証・公開してから成功とする。次のsessionでは公開済み状態から再構築する。
-OpenAI側の隔離環境に移すなら利用者側Dockerは不要だが、OpenAI内部の実装にコンテナがないという意味ではない。
+OpenAI側の隔離環境に移す場合、利用者側での実行環境管理は不要になる。
 本件でself-hosted sandboxを選ぶとホスト管理が残り、今回の目的への効果は小さい。
 
 Webhookはsessionの状態変化を知らせるもので、定期起動の代わりではない。
@@ -188,7 +188,7 @@ Discordを維持する案では、送信は検証済みoutboxを扱う小さな�
 OpenAIがDiscord gatewayまで管理する公式の対応機能は今回確認できなかった。
 
 公式Agents APIのSlack bot例でも、Slack受信、token、会話対応付けはアプリが担当する。
-この例はそのまま導入するとDocker等の基盤を再び持つため、参考にするのは責務分担であり、実行構成ではない。
+この例は追加の実行基盤を必要とするため、参考にする範囲を責務分担に限定する。
 [公式Slack bot例](https://developers.openai.com/cookbook/examples/agents_api/apps/slack_bot/readme)
 
 ## 5. 構成案の比較

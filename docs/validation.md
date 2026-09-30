@@ -1,6 +1,6 @@
 # 検証記録 — 2026-09-27
 
-> 初回移植時の履歴。Docker経路は後続変更で撤去済み。現在の状態は [ネイティブ移行検証](native-validation.md)。
+> 初回移植時の履歴。現在の状態は [ネイティブ移行検証](native-validation.md)。
 
 
 ## 自動検証
@@ -46,7 +46,7 @@ Codex CLI **0.157.1** の `app-server generate-json-schema` とrequest fieldsを
 
 このhostのworkspace-write shellは `bwrap: setting up uid map: Permission denied` により失敗しました。モデル応答とJSON出力までは成功。host sandboxを無効化するfallbackは追加していません。
 
-代わりに、非root / read-only root / cap_drop ALL / no-new-privileges / tmpfs profileのDockerで実モデルを実行し、ファイル作成・読み戻し・strict JSON応答に成功しました。hostのauth.jsonはread-only mountのみで、imageやGitへコピーしていません。
+後続のホスト設定でsandboxを起動できるようになり、実モデルの編集とJSON応答を検証しました。詳細は [ネイティブ移行検証](native-validation.md) を参照してください。
 
 さらに `tools/smoke-codex.py --live` で合成記事を使った実パイプラインを実行:
 
@@ -60,9 +60,9 @@ Codex CLI **0.157.1** の `app-server generate-json-schema` とrequest fieldsを
 
 ## 配備
 
-Codex専用Docker imageのbuild成功。Compose config、生成systemd user unitのverify成功。固定モデル名やAPI keyなしで実モデル試験を通しました。
+生成systemd user unitのverify成功。固定モデル名やAPI keyなしで実モデル試験を通しました。
 
-CIは同じofflineテスト・compile・manifest/skill/public-tree検査・Compose構文検査を実施します。モデル認証と通知先をCIに渡しません。
+CIはofflineテスト・compile・manifest/skill/public-tree検査とnative sandbox検査を実施します。モデル認証と通知先をCIに渡しません。
 
 ## 実行していない操作
 

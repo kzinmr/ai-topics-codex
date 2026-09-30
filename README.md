@@ -7,9 +7,9 @@ Wiki・原文・feed 定義は [ai-topics](https://github.com/kzinmr/ai-topics)�
 - RSS / newsletter / X / sitemap → raw 保存 → triage JSON → Wiki統合 → index/log・品質チェック。
 - 定時実行、依存段階の成功・鮮度検査、単一 writer lock、実行履歴、失敗復旧、独立した配信 outbox。
 - ChatGPT 認証を実行前に確認。APIキー・別モデルプロバイダーへ自動で切り替えません。
-- Docker不要のホスト運用。Codex標準sandboxでWiki・管理コード・認証情報の権限を分離します。
+- ホスト上で直接運用。Codex標準sandboxでWiki・管理コード・認証情報の権限を分離します。
 
-[ネイティブ移行検証](docs/native-validation.md) · [Docker依存撤去の評価](docs/docker-free-assessment.md) · [調査・移植レポート](docs/migration-report.md) · [設計](docs/architecture.md) · [移行手順](docs/migration.md) · [運用](docs/operations.md) · [検証記録](docs/validation.md)
+[ネイティブ移行検証](docs/native-validation.md) · [ネイティブ実行環境](docs/native-runtime.md) · [調査・移植レポート](docs/migration-report.md) · [設計](docs/architecture.md) · [移行手順](docs/migration.md) · [運用](docs/operations.md) · [検証記録](docs/validation.md)
 
 今後の検討: [OpenAIサービスによる周辺基盤の簡素化（設計ドラフト・未実装）](docs/openai-services-design-draft.md)。
 責務の再分解: [通常ソフトウェア・モデル処理・Agent Harnessのモジュール設計（検討用・未実装）](docs/modular-wiki-design-draft.md)。
